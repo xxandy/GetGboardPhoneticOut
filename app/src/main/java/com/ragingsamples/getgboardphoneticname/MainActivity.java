@@ -1,0 +1,93 @@
+package com.ragingsamples.getgboardphoneticname;
+
+/* FILE: MainActivity.java
+ * PURPOSE: This small app demonstrates how to retrieve phonetic information from a Text Field
+ *          receiving Japanese input with Gboard, via a TextWatcher.
+ *
+ * DETAILS:
+ *          Note in the accompanying resources definition that the field must meet these conditions:
+ *           android:inputType="textPersonName"
+ *           android:privateImeOptions="com.google.android.inputmethod.latin.requestPhoneticOutput"
+ *          In this sample code, fields that don't meet this condition are also included as
+ *          counter-examples.
+ *          To see this in effect follolw this procedure:
+ *              - Use Gboard with the input language set to Japanese
+ *              - type a Japanese name (complete or incomplete)
+ *              - choose one of the candidates
+ *          Expected result:
+ *              - the field with R.id.lastPhoneticInfoDisplay gets briefly highlighted in blue,
+ *                and shows extracted phonetic information
+ *
+ */
+
+import android.text.SpannableStringBuilder;
+import android.text.TextWatcher;
+import android.text.Editable;
+import android.text.style.TtsSpan;
+import android.widget.EditText;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+
+
+
+public class MainActivity extends AppCompatActivity {
+    private EventHighlighter eventHighlighter;
+
+    private class PhoneticRetriever implements TextWatcher {
+        PhoneticRetriever( EditText target )
+        {
+            this._target = target;
+        }
+
+        // Extracts phonetic metadata from an incoming text blob
+        private String getPhoneticMetadata(CharSequence s) {
+            String phonetic = null;
+            if (s instanceof SpannableStringBuilder) {
+                SpannableStringBuilder textAsSpan = (SpannableStringBuilder) s;
+                TtsSpan[] allSpans = textAsSpan.getSpans(0, s.length(), TtsSpan.class);
+                if (allSpans.length == 1 && allSpans[0].getType().equals(TtsSpan.TYPE_TEXT)) {
+                    phonetic =  allSpans[0].getArgs().getString(TtsSpan.ARG_TEXT);
+                }
+            }
+            return phonetic;
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            String sphonetic = getPhoneticMetadata(s);
+            if (sphonetic == null) {
+                _target.setText( "No Phonetic");
+                eventHighlighter.restartRed();
+            } else {
+                _target.setText("Phonetic: " + sphonetic);
+                eventHighlighter.restartBlue();
+            }
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+        EditText _target;
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        EditText etNoPhonetic = (EditText)findViewById(R.id.editTextNoPhonetic);
+        EditText etPhoneticNoOptions = (EditText)findViewById(R.id.editTextPhoneticNoOptions );
+        EditText etPhoneticWithOptions = (EditText)findViewById(R.id.editTextPhoneticWithOptions );
+
+        EditText etResult =  (EditText)findViewById(R.id.lastPhoneticInfoDisplay );
+        this.eventHighlighter = new EventHighlighter( etResult );
+
+        etNoPhonetic.addTextChangedListener( new PhoneticRetriever(etResult) );
+        etPhoneticNoOptions.addTextChangedListener( new PhoneticRetriever(etResult) );
+        etPhoneticWithOptions.addTextChangedListener( new PhoneticRetriever(etResult) );
+    }
+}
