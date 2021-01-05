@@ -1,4 +1,4 @@
-package com.ragingsamples.getgboardphoneticname;
+package com.ragingsamples.getimephoneticname;
 
 /* FILE: EventHighlighter.java
  * PURPOSE: Timer-based UI highlighter.  Highlights a view by changing its background color

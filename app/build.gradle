@@ -6,7 +6,7 @@ android {
     compileSdkVersion 29
 
     defaultConfig {
-        applicationId "com.ragingsamples.getgboardphoneticname"
+        applicationId "com.ragingsamples.getimephoneticname"
         minSdkVersion 27
         targetSdkVersion 29
         versionCode 1

@@ -1,8 +1,8 @@
-package com.ragingsamples.getgboardphoneticname;
+package com.ragingsamples.getimephoneticname;
 
 /* FILE: MainActivity.java
  * PURPOSE: This small app demonstrates how to retrieve phonetic information from a Text Field
- *          receiving Japanese input with Gboard, via a TextWatcher.
+ *          receiving Japanese input with IME, via a TextWatcher.
  *
  * DETAILS:
  *          Note in the accompanying resources definition that the field must meet these conditions:
@@ -11,7 +11,7 @@ package com.ragingsamples.getgboardphoneticname;
  *          In this sample code, fields that don't meet this condition are also included as
  *          counter-examples.
  *          To see this in effect follolw this procedure:
- *              - Use Gboard with the input language set to Japanese
+ *              - Use IME with the input language set to Japanese
  *              - type a Japanese name (complete or incomplete)
  *              - choose one of the candidates
  *          Expected result:

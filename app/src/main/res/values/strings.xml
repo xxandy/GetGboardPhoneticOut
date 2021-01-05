@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">GetGboardPhoneticName</string>
+    <string name="app_name">GetIMEPhoneticName</string>
     <string name="field_with_phonetic_representation_privateimeoption">Field with phonetic representation + privateImeOption</string>
     <string name="field_without_phonetic_representation">Field without phonetic representation</string>
     <string name="last_phonetic_info_detected">Last phonetic info detected</string>
