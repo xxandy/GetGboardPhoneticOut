@@ -29,7 +29,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
-
+import android.util.Log;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -48,7 +48,13 @@ public class MainActivity extends AppCompatActivity {
                 SpannableStringBuilder textAsSpan = (SpannableStringBuilder) s;
                 TtsSpan[] allSpans = textAsSpan.getSpans(0, s.length(), TtsSpan.class);
                 if (allSpans.length == 1 && allSpans[0].getType().equals(TtsSpan.TYPE_TEXT)) {
+                    // log shows where the span is in the text
+                    Log.v("PHON",
+                            s.toString() + " [" + textAsSpan.length() + "] start:" +
+                            textAsSpan.getSpanStart(allSpans[0]) + " end:" +
+                            textAsSpan.getSpanEnd(allSpans[0]));
                     phonetic =  allSpans[0].getArgs().getString(TtsSpan.ARG_TEXT);
+                    textAsSpan.removeSpan(allSpans[0]); // avoid consuming again
                 }
             }
             return phonetic;
@@ -71,8 +77,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
+        public void onTextChanged(CharSequence s, int start, int before, int count) {}
         EditText _target;
     }
     @Override
