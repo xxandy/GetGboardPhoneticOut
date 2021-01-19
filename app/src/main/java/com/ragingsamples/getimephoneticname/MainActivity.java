@@ -34,11 +34,12 @@ import android.util.Log;
 
 public class MainActivity extends AppCompatActivity {
     private EventHighlighter eventHighlighter;
+    private EventHighlighter eventHighlighterCumulative;
 
     private class PhoneticRetriever implements TextWatcher {
-        PhoneticRetriever( EditText target )
-        {
+        PhoneticRetriever( EditText target, EditText cumulative ) {
             this._target = target;
+            this._cumulativeTarget = cumulative;
         }
 
         // Extracts phonetic metadata from an incoming text blob
@@ -66,19 +67,22 @@ public class MainActivity extends AppCompatActivity {
             if (sphonetic == null) {
                 _target.setText( "No Phonetic");
                 eventHighlighter.restartRed();
+                eventHighlighterCumulative.restartRed();
             } else {
                 _target.setText("Phonetic: " + sphonetic);
+                _cumulativeTarget.setText(_cumulativeTarget.getText() + sphonetic);
                 eventHighlighter.restartBlue();
+                eventHighlighterCumulative.restartBlue();
             }
         }
 
         @Override
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before, int count) {}
         EditText _target;
+        EditText _cumulativeTarget;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,8 +95,11 @@ public class MainActivity extends AppCompatActivity {
         EditText etResult =  (EditText)findViewById(R.id.lastPhoneticInfoDisplay );
         this.eventHighlighter = new EventHighlighter( etResult );
 
-        etNoPhonetic.addTextChangedListener( new PhoneticRetriever(etResult) );
-        etPhoneticNoOptions.addTextChangedListener( new PhoneticRetriever(etResult) );
-        etPhoneticWithOptions.addTextChangedListener( new PhoneticRetriever(etResult) );
+        EditText etCumulative =  (EditText)findViewById(R.id.cumulativeInfo );
+        this.eventHighlighterCumulative = new EventHighlighter( etCumulative );
+
+        etNoPhonetic.addTextChangedListener(new PhoneticRetriever(etResult, etCumulative));
+        etPhoneticNoOptions.addTextChangedListener(new PhoneticRetriever(etResult, etCumulative));
+        etPhoneticWithOptions.addTextChangedListener(new PhoneticRetriever(etResult, etCumulative));
     }
 }
